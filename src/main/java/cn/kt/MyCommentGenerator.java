@@ -55,7 +55,10 @@ public class MyCommentGenerator implements CommentGenerator {
 
     @Override
     public void addJavaFileComment(CompilationUnit compilationUnit) {
-        // add no file level comments by default
+        compilationUnit.addFileCommentLine("/**");
+        compilationUnit.addFileCommentLine(" * @author " + author);
+        compilationUnit.addFileCommentLine(" * @since " + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(Instant.now()));
+        compilationUnit.addFileCommentLine(" */");
         if (isAnnotations) {
             compilationUnit.addImportedType(new FullyQualifiedJavaType("javax.persistence.Table"));
             compilationUnit.addImportedType(new FullyQualifiedJavaType("javax.persistence.Id"));
