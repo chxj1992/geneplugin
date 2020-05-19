@@ -19,6 +19,7 @@ package cn.kt;
 import static org.mybatis.generator.internal.util.StringUtility.isTrue;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import java.util.Set;
@@ -41,6 +42,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  */
 public class MyCommentGenerator implements CommentGenerator {
 
+    private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd").withZone(ZoneId.systemDefault());
 
     private Properties properties;
     private boolean columnRemarks;
@@ -52,13 +54,8 @@ public class MyCommentGenerator implements CommentGenerator {
         properties = new Properties();
     }
 
-
     @Override
     public void addJavaFileComment(CompilationUnit compilationUnit) {
-        compilationUnit.addFileCommentLine("/**");
-        compilationUnit.addFileCommentLine(" * @author " + author);
-        compilationUnit.addFileCommentLine(" * @since " + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(Instant.now()));
-        compilationUnit.addFileCommentLine(" */");
         if (isAnnotations) {
             compilationUnit.addImportedType(new FullyQualifiedJavaType("javax.persistence.Table"));
             compilationUnit.addImportedType(new FullyQualifiedJavaType("javax.persistence.Id"));
@@ -119,19 +116,14 @@ public class MyCommentGenerator implements CommentGenerator {
     @Override
     public void addClassComment(InnerClass innerClass,
                                 IntrospectedTable introspectedTable) {
-        innerClass.addJavaDocLine("/**");
-        innerClass.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName() + " " + introspectedTable.getRemarks());
-        innerClass.addJavaDocLine(" * @author " + author);
-        innerClass.addJavaDocLine(" * @since " + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(Instant.now()));
-        innerClass.addJavaDocLine(" */");
     }
 
     @Override
     public void addModelClassComment(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         topLevelClass.addJavaDocLine("/**");
-        topLevelClass.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName() + " " + introspectedTable.getRemarks());
+        topLevelClass.addJavaDocLine(" * " + introspectedTable.getRemarks() + "(" + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName() + ") 实体类");
         topLevelClass.addJavaDocLine(" * @author " + author);
-        topLevelClass.addJavaDocLine(" * @since " + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(Instant.now()));
+        topLevelClass.addJavaDocLine(" * @since " + DATE_FORMATTER.format(Instant.now()));
         topLevelClass.addJavaDocLine(" */");
     }
 
