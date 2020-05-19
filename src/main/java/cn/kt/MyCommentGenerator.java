@@ -16,29 +16,38 @@
 
 package cn.kt;
 
-import org.mybatis.generator.api.CommentGenerator;
-import org.mybatis.generator.api.IntrospectedColumn;
-import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.dom.java.*;
-import org.mybatis.generator.api.dom.xml.XmlElement;
-import org.mybatis.generator.internal.util.StringUtility;
+import static org.mybatis.generator.internal.util.StringUtility.isTrue;
 
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import java.util.Set;
 
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
+import org.mybatis.generator.api.CommentGenerator;
+import org.mybatis.generator.api.IntrospectedColumn;
+import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.dom.java.CompilationUnit;
+import org.mybatis.generator.api.dom.java.Field;
+import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
+import org.mybatis.generator.api.dom.java.InnerClass;
+import org.mybatis.generator.api.dom.java.InnerEnum;
+import org.mybatis.generator.api.dom.java.Method;
+import org.mybatis.generator.api.dom.java.TopLevelClass;
+import org.mybatis.generator.api.dom.xml.XmlElement;
+import org.mybatis.generator.internal.util.StringUtility;
 
 /**
  * 此插件使用数据库表中列的注释来生成Java Model中属性的注释
  */
-public class DbRemarksCommentGenerator implements CommentGenerator {
+public class MyCommentGenerator implements CommentGenerator {
 
 
     private Properties properties;
     private boolean columnRemarks;
     private boolean isAnnotations;
+    private String author;
 
-    public DbRemarksCommentGenerator() {
+    public MyCommentGenerator() {
         super();
         properties = new Properties();
     }
@@ -99,32 +108,32 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     @Override
     public void addConfigurationProperties(Properties properties) {
         this.properties.putAll(properties);
-        columnRemarks = isTrue(properties
-                .getProperty("columnRemarks"));
-        isAnnotations = isTrue(properties
-                .getProperty("annotations"));
+        columnRemarks = isTrue(properties.getProperty("columnRemarks"));
+        isAnnotations = isTrue(properties.getProperty("annotations"));
+        author = properties.getProperty("author");
     }
 
     @Override
     public void addClassComment(InnerClass innerClass,
                                 IntrospectedTable introspectedTable) {
+        innerClass.addJavaDocLine("/**");
+        innerClass.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName() + " " + introspectedTable.getRemarks());
+        innerClass.addJavaDocLine(" * @author " + author);
+        innerClass.addJavaDocLine(" * @since " + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(Instant.now()));
+        innerClass.addJavaDocLine(" */");
     }
 
     @Override
-    public void addModelClassComment(TopLevelClass topLevelClass,
-                                     IntrospectedTable introspectedTable) {
+    public void addModelClassComment(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         topLevelClass.addJavaDocLine("/**");
-        topLevelClass.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName());
-        topLevelClass.addJavaDocLine(" * @author ");
+        topLevelClass.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName() + " " + introspectedTable.getRemarks());
+        topLevelClass.addJavaDocLine(" * @author " + author);
+        topLevelClass.addJavaDocLine(" * @since " + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(Instant.now()));
         topLevelClass.addJavaDocLine(" */");
-        if (isAnnotations) {
-            topLevelClass.addAnnotation("@Table(name=\"" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + "\")");
-        }
     }
 
     @Override
-    public void addEnumComment(InnerEnum innerEnum,
-                               IntrospectedTable introspectedTable) {
+    public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {
     }
 
     @Override
@@ -156,10 +165,12 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
             if (introspectedColumn.isIdentity()) {
                 if (introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement().equals("JDBC")) {
                     field.addAnnotation("@GeneratedValue(generator = \"JDBC\")");
-                } else {
+                }
+                else {
                     field.addAnnotation("@GeneratedValue(strategy = GenerationType.IDENTITY)");
                 }
-            } else if (introspectedColumn.isSequenceColumn()) {
+            }
+            else if (introspectedColumn.isSequenceColumn()) {
                 field.addAnnotation("@SequenceGenerator(name=\"\",sequenceName=\"" + introspectedTable.getTableConfiguration().getGeneratedKey().getRuntimeSqlStatement() + "\")");
             }
         }
@@ -189,7 +200,7 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     @Override
     public void addClassComment(InnerClass innerClass,
                                 IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
-        innerClass.addJavaDocLine("/**"); //$NON-NLS-1$
-        innerClass.addJavaDocLine(" */"); //$NON-NLS-1$
+        innerClass.addJavaDocLine("/**");
+        innerClass.addJavaDocLine(" */");
     }
 }
