@@ -36,12 +36,6 @@ public class BatchInsertPlugin extends PluginAdapter {
      */
     @Override
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        addBatchInsertMethod(interfaze, introspectedTable);
-        return true;
-    }
-
-
-    private void addBatchInsertMethod(Interface interfaze, IntrospectedTable introspectedTable) {
 
         // 设置需要import的类
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();
@@ -50,22 +44,25 @@ public class BatchInsertPlugin extends PluginAdapter {
         importedTypes.add(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
         FullyQualifiedJavaType ibsreturnType = FullyQualifiedJavaType.getIntInstance();
 
-        // BatchInsert
-        Method batchInsertMethod = new Method();
-        // 1.设置方法可见性
-        batchInsertMethod.setVisibility(JavaVisibility.PUBLIC);
-        // 2.设置返回值类型 int类型
-        batchInsertMethod.setReturnType(ibsreturnType);
-        // 3.设置方法名
-        batchInsertMethod.setName("batchInsert");
-        // 4.设置参数列表
-        FullyQualifiedJavaType paramType = FullyQualifiedJavaType.getNewListInstance();
-        FullyQualifiedJavaType paramListType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
-        paramType.addTypeArgument(paramListType);
-        batchInsertMethod.addParameter(new Parameter(paramType, "records"));
-        interfaze.addImportedTypes(importedTypes);
-        interfaze.addMethod(batchInsertMethod);
+        addBatchInsertMethod(interfaze, introspectedTable, importedTypes, ibsreturnType);
+//        addBatchInsertSelectiveMethod(interfaze, introspectedTable, importedTypes, ibsreturnType);
 
+        return true;
+    }
+
+
+    /**
+     * 修改Mapper.xml
+     */
+    @Override
+    public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
+        addBatchInsertXml(document, introspectedTable);
+//        addBatchInsertSelectiveXml(document, introspectedTable);
+        return true;
+    }
+
+
+    private void addBatchInsertSelectiveMethod(Interface interfaze, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> importedTypes, FullyQualifiedJavaType ibsreturnType) {
         // BatchInsertSelective
         Method batchInsertSelectiveMethod = new Method();
         // 1.设置方法可见性
@@ -84,16 +81,24 @@ public class BatchInsertPlugin extends PluginAdapter {
         interfaze.addMethod(batchInsertSelectiveMethod);
     }
 
-
-    /**
-     * 修改Mapper.xml
-     */
-    @Override
-    public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
-        addBatchInsertXml(document, introspectedTable);
-        addBatchInsertSelectiveXml(document, introspectedTable);
-        return true;
+    private void addBatchInsertMethod(Interface interfaze, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> importedTypes, FullyQualifiedJavaType ibsreturnType) {
+        // BatchInsert
+        Method batchInsertMethod = new Method();
+        // 1.设置方法可见性
+        batchInsertMethod.setVisibility(JavaVisibility.PUBLIC);
+        // 2.设置返回值类型 int类型
+        batchInsertMethod.setReturnType(ibsreturnType);
+        // 3.设置方法名
+        batchInsertMethod.setName("batchInsert");
+        // 4.设置参数列表
+        FullyQualifiedJavaType paramType = FullyQualifiedJavaType.getNewListInstance();
+        FullyQualifiedJavaType paramListType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+        paramType.addTypeArgument(paramListType);
+        batchInsertMethod.addParameter(new Parameter(paramType, "records"));
+        interfaze.addImportedTypes(importedTypes);
+        interfaze.addMethod(batchInsertMethod);
     }
+
 
 
     private void addBatchInsertXml(Document document, IntrospectedTable introspectedTable) {
