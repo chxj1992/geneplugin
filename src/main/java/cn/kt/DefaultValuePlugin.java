@@ -76,7 +76,7 @@ public class DefaultValuePlugin extends PluginAdapter {
             if (("ctime".equals(column.getActualColumnName()) && isInsert) || "utime".equals(column.getActualColumnName())) {
                 sql = replace(column, sql, "NOW()");
             }
-            if ("valid".equals(column.getActualColumnName())) {
+            if ("valid".equals(column.getActualColumnName()) && isInsert) {
                 sql = replace(column, sql, "1");
             }
         }
