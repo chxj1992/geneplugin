@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
@@ -36,7 +35,7 @@ public class MapperCommentPlugin extends PluginAdapter {
             IntrospectedTable introspectedTable
     ) {
         interfaze.addJavaDocLine("/**");
-        interfaze.addJavaDocLine(" * " + introspectedTable.getRemarks() + " Mapper 类");
+        interfaze.addJavaDocLine(" * " + introspectedTable.getRemarks() + "(" + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName() + ") Mapper 类");
         interfaze.addJavaDocLine(" * @author " + author);
         interfaze.addJavaDocLine(" * @since " + DATE_FORMATTER.format(Instant.now()));
         interfaze.addJavaDocLine(" */");

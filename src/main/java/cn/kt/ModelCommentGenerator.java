@@ -40,7 +40,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 /**
  * 此插件使用数据库表中列的注释来生成Java Model中属性的注释
  */
-public class MyCommentGenerator implements CommentGenerator {
+public class ModelCommentGenerator implements CommentGenerator {
 
     private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd").withZone(ZoneId.systemDefault());
 
@@ -49,7 +49,7 @@ public class MyCommentGenerator implements CommentGenerator {
     private boolean isAnnotations;
     private String author;
 
-    public MyCommentGenerator() {
+    public ModelCommentGenerator() {
         super();
         properties = new Properties();
     }
