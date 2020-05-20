@@ -75,7 +75,6 @@ public class MySQLLimitPlugin extends PluginAdapter {
     @Override
     public boolean sqlMapSelectByExampleWithoutBLOBsElementGenerated(XmlElement element,
                                                                      IntrospectedTable introspectedTable) {
-
         XmlElement ifLimitNotNullElement = new XmlElement("if");
         ifLimitNotNullElement.addAttribute(new Attribute("test", "limit != null"));
 
@@ -99,6 +98,7 @@ public class MySQLLimitPlugin extends PluginAdapter {
      */
     @Override
     public boolean sqlMapSelectByExampleWithBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+
         XmlElement ifLimitNotNullElement = new XmlElement("if");
         ifLimitNotNullElement.addAttribute(new Attribute("test", "limit != null"));
 
