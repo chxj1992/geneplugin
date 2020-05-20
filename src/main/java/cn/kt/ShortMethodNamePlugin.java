@@ -22,6 +22,7 @@ public class ShortMethodNamePlugin extends PluginAdapter {
         introspectedTable.setDeleteByPrimaryKeyStatementId("deleteById");
         introspectedTable.setUpdateByPrimaryKeyStatementId("updateById");
         introspectedTable.setUpdateByPrimaryKeySelectiveStatementId("updateByIdSelective");
+        introspectedTable.setUpdateByPrimaryKeyWithBLOBsStatementId("updateByIdWithBlobsStatementId");
     }
 
 }
