@@ -47,7 +47,8 @@ public class BatchInsertPlugin extends PluginAdapter {
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();
         importedTypes.add(FullyQualifiedJavaType.getNewListInstance());
         importedTypes.add(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()));
-        importedTypes.add(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
+//        importedTypes.add(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
+
         FullyQualifiedJavaType ibsreturnType = FullyQualifiedJavaType.getIntInstance();
 
         // BatchInsert
