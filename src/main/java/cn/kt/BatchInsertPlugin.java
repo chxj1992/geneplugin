@@ -41,7 +41,6 @@ public class BatchInsertPlugin extends PluginAdapter {
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();
         importedTypes.add(FullyQualifiedJavaType.getNewListInstance());
         importedTypes.add(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()));
-//        importedTypes.add(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
 
         FullyQualifiedJavaType ibsreturnType = FullyQualifiedJavaType.getIntInstance();
 
@@ -64,6 +63,9 @@ public class BatchInsertPlugin extends PluginAdapter {
 
 
     private void addBatchInsertSelectiveMethod(Interface interfaze, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> importedTypes, FullyQualifiedJavaType ibsreturnType) {
+
+        importedTypes.add(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
+
         // BatchInsertSelective
         Method batchInsertSelectiveMethod = new Method();
         // 1.设置方法可见性
