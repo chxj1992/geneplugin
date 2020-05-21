@@ -36,6 +36,7 @@ public class MapperCommentPlugin extends PluginAdapter {
     ) {
         interfaze.addJavaDocLine("/**");
         interfaze.addJavaDocLine(" * " + introspectedTable.getRemarks() + "(" + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName() + ") Mapper 类");
+        interfaze.addJavaDocLine(" *");
         interfaze.addJavaDocLine(" * @author " + author);
         interfaze.addJavaDocLine(" * @since " + DATE_FORMATTER.format(Instant.now()));
         interfaze.addJavaDocLine(" */");

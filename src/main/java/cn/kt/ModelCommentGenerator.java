@@ -122,6 +122,7 @@ public class ModelCommentGenerator implements CommentGenerator {
     public void addModelClassComment(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         topLevelClass.addJavaDocLine("/**");
         topLevelClass.addJavaDocLine(" * " + introspectedTable.getRemarks() + "(" + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName() + ") 实体类");
+        topLevelClass.addJavaDocLine(" *");
         topLevelClass.addJavaDocLine(" * @author " + author);
         topLevelClass.addJavaDocLine(" * @since " + DATE_FORMATTER.format(Instant.now()));
         topLevelClass.addJavaDocLine(" */");
