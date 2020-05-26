@@ -18,7 +18,7 @@ public class ShortMethodNamePlugin extends PluginAdapter {
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
 
-        introspectedTable.setSelectByPrimaryKeyStatementId("selectById");
+        introspectedTable.setSelectByPrimaryKeyStatementId("getById");
         introspectedTable.setDeleteByPrimaryKeyStatementId("deleteById");
         introspectedTable.setUpdateByPrimaryKeyStatementId("updateById");
         introspectedTable.setUpdateByPrimaryKeySelectiveStatementId("updateByIdSelective");
